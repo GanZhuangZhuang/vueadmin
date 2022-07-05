@@ -11,8 +11,7 @@
         <span
           v-show="$route.path !== item.path"
           @click.stop="$store.commit('tags/delTag', index)"
-          ><close-circle-outlined
-        /></span>
+        ></span>
       </li>
     </ul>
   </div>
@@ -29,17 +28,20 @@ ul {
 }
 
 li {
+  width: 50px;
   border: 1px solid #ddd;
   height: 25px;
   line-height: 25px;
   font-size: 12px;
   padding: 0 5px;
   margin: 0 5px;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .bgc {
-  background: rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(0, 0, 0, 0.85);
+  background: #545c64;
+  border: 1px solid #545c64;
   color: #fff;
 }
 </style>

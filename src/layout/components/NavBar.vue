@@ -1,6 +1,6 @@
 <template>
   <div class="navBox">
-    <div class="left"><b>VueAdmin后台管理系统</b></div>
+    <div class="left">VueAdmin后台管理系统</div>
     <div class="right">
       <img class="portrait" :src="$store.getters.userInfo.avatar" />
       <span class="dropdown">
@@ -18,6 +18,8 @@
           </template>
         </el-dropdown>
       </span>
+      <span>视频讲解</span>
+      <span>网站</span>
     </div>
     <el-dialog v-model="data.dialogVisible" title="警告！" width="30%">
       <span>确定退出吗？</span>
@@ -32,7 +34,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
 // 对话框的默认状态
@@ -61,7 +63,16 @@ const logOut = () => {
   align-items: center;
   background-color: #17b3a3;
 }
+.left {
+  display: inline-block;
+  padding-left: 280px;
+}
 .right {
+  padding-right: 200px;
+  span {
+    font-size: 14px;
+    padding: 10px;
+  }
   .portrait {
     width: 36px;
     height: 36px;

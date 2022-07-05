@@ -29,7 +29,7 @@ import TagsView from '@/layout/components/TagsView'
 
   .left {
     width: 210px;
-    background-color: #001529;
+    background-color: #545c64;
   }
 
   .right {
