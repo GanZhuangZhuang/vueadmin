@@ -1,19 +1,20 @@
-// 引入axios
 import axios from 'axios'
-// import store from '@/store'
-// import router from '@/router'
 import { ElMessage } from 'element-plus'
+import store from '@/store'
 
-// //创建axios实例
+// 创建axios实例
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API,
-  baseURL: '',
+  baseURL: 'https://www.markerhub.com/vueadmin-java',
   timeout: 5000
 })
 
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
+    const token = store.getters.token
+    if (token) {
+      config.headers.Authorization = token
+    }
     return config
   },
   (error) => {
@@ -25,7 +26,19 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    return response
+    if (response.headers.authorization) {
+      store.commit('user/setToken', response.headers.authorization)
+    }
+    const {
+      data: { data, code, msg }
+    } = response
+
+    if (code === 200) {
+      return data
+    } else {
+      _showError(msg)
+      return Promise.reject(msg)
+    }
   },
   (error) => {
     // 响应失败进行信息提示
@@ -40,13 +53,5 @@ const _showError = (message) => {
   ElMessage.error(info)
 }
 
-// 统一了传参处理
-const request = (options) => {
-  if (options.method.toLowerCase() === 'get') {
-    options.params = options.data || {}
-  }
-  return service(options)
-}
-
 // 导出axios实例对象
-export default request
+export default service

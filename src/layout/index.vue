@@ -1,20 +1,19 @@
 <template>
   <div class="app-wrapper">
-    <sidebar class="sidebar-container"></sidebar>
+    123
+    <!-- <sidebar class="sidebar-container"></sidebar> -->
     <div class="main-container">
       <div class="fixed-header">
-        <navbar></navbar>
+        456
+        <!-- <navbar></navbar> -->
         <!-- <tags-view></tags-view> -->
       </div>
-      <AppMain></AppMain>
+      789
+      <!-- <AppMain></AppMain> -->
     </div>
   </div>
 </template>
-<script setup>
-import sidebar from './components/Sidebar/index.vue'
-import Navbar from './components/NavBar.vue'
-import AppMain from './components/AppMain.vue'
-</script>
+<script setup></script>
 <style lang="scss" scoped>
 .app-wrapper {
   position: relative;
@@ -22,9 +21,9 @@ import AppMain from './components/AppMain.vue'
   height: 100%;
 
   .sidebar-container {
-    width: 210px;
+    width: 200px;
     height: 100%;
-    background-color: #304156;
+    background-color: #545c64;
     overflow-y: auto;
     position: fixed;
     left: 0;

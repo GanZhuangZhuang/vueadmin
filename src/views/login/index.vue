@@ -1,26 +1,19 @@
 <template>
   <div class="login">
-    <!-- 用户 -->
     <el-form :model="loginForm" :rules="loginRules" class="demo-ruleForm">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="loginForm.username" />
       </el-form-item>
-      <!-- 密码 -->
       <el-form-item label="密&nbsp;&nbsp;&nbsp;&nbsp;码" prop="password">
         <el-input v-model="loginForm.password" type="password" />
       </el-form-item>
-      <!-- 验证码 -->
       <el-form-item label="验证码" prop="code">
-        <el-input class="auth" v-model="loginForm.code" @focus="getImgCode" />
-        <img :src="data.imgCode" alt="" class="codeImg" />
+        <el-input class="auth" v-model="loginForm.code" />
+        <img :src="imgCodeUrl" alt="正在加载" class="codeImg" />
       </el-form-item>
       <el-form-item>
-        <el-button
-          class="elButton"
-          type="primary"
-          @click="onLogin"
-          @keyup.enter="onLogin"
-          >提交</el-button
+        <el-button type="primary" @click="onLogin" @keyup.enter="onLogin"
+          >登录</el-button
         >
       </el-form-item>
     </el-form>
@@ -28,22 +21,21 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import user from '../../api/modules/user'
-
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { getCaptcha, getLogin } from '@/api/login'
+const router = useRouter()
 /**
  * @描述 表单数据对象
  */
 const loginForm = reactive({
   username: 'test',
   password: '1234567',
-  code: ''
+  code: '',
+  token: ''
 })
-const data = reactive({
-  imgCode: ''
-})
+// 验证码图片地址
+const imgCodeUrl = ref('')
 // 用户名验证规则
 const validateUsername = (rule, value, callback) => {
   if (value === '') {
@@ -93,20 +85,25 @@ const loginRules = {
   ]
 }
 /**
-登录事件
+ * @描述 登录事件
  */
 const onLogin = async () => {
-  // router.push('/layout')
-  const res = await user.getCode()
-  console.log(res)
+  try {
+    await getLogin(loginForm)
+    await router.push('/index')
+  } catch (error) {
+    console.log(error)
+  }
 }
 /**
-获取验证码事件
+ * @描述 获取验证码事件
  */
 const getImgCode = async () => {
-  const res = await user.getCode()
-  data.imgCode = res.data.data.captchaImg
+  const res = await getCaptcha()
+  loginForm.token = res.token
+  imgCodeUrl.value = res.captchaImg
 }
+getImgCode()
 </script>
 <style lang="scss" scoped>
 .login {
@@ -124,6 +121,7 @@ const getImgCode = async () => {
       width: 120px;
       height: 40px;
       border: 1px solid #000;
+      border-radius: 5px;
     }
   }
   .elButton {
