@@ -90,7 +90,7 @@ const loginRules = {
 const onLogin = async () => {
   try {
     await getLogin(loginForm)
-    await router.push('/index')
+    await router.push('/layout')
   } catch (error) {
     console.log(error)
   }

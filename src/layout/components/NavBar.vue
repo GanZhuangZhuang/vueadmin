@@ -1,61 +1,74 @@
 <template>
-  <div class="NavBar">
-    <div class="left">VueAdmin后台管理系统</div>
+  <div class="navBox">
+    <div class="left"><b>VueAdmin后台管理系统</b></div>
     <div class="right">
-      <div class="min-img">
-        <img src="" alt="" />
-      </div>
-      <div class="min-left">
+      <img class="portrait" :src="$store.getters.userInfo.avatar" />
+      <span class="dropdown">
         <el-dropdown>
-          <span class="el-dropdown-link">
-            text
-            <el-icon class="el-icon--right">
-              <arrow-down />
-            </el-icon>
-          </span>
+          {{ $store.getters.userInfo.username }}
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>个人中心</el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item @click="$router.push('/')"
+                >个人中心</el-dropdown-item
+              >
+              <el-dropdown-item @click="data.dialogVisible = true"
+                >退出登录</el-dropdown-item
+              >
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </div>
-      <div class="min-center">视频讲解</div>
-      <div class="min-right">网站</div>
+      </span>
     </div>
+    <el-dialog v-model="data.dialogVisible" title="警告！" width="30%">
+      <span>确定退出吗？</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="data.dialogVisible = false">关闭</el-button>
+          <el-button type="primary" @click="logOut">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
-<script setup></script>
-<style lang="scss" scoped>
-.NavBar {
-  width: 100%;
-  background-color: #17b3a3;
-  height: 55px;
-  display: flex;
-  .left {
-    width: 80%;
-    text-align: center;
-    font-weight: 700;
-    line-height: 55px;
-  }
-  .right {
-    display: flex;
-    width: 20%;
-    // background: pink;
-    height: 55px;
-    line-height: 55px;
-    font-size: 14px;
-    div {
-      flex: 1;
-    }
-  }
+
+<script setup>
+import { reactive, ref } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
+// 对话框的默认状态
+const data = reactive({
+  dialogVisible: false
+})
+/**
+ * @描述 退出登录
+ */
+const logOut = () => {
+  data.dialogVisible = false
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 500)
+  }).then(() => {
+    store.commit('user/logout')
+  })
 }
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
+</script>
+<style lang="scss" scoped>
+.navBox {
   display: flex;
+  padding: 0 10px;
+  justify-content: space-between;
   align-items: center;
-  display: inline-block;
+  background-color: #17b3a3;
+}
+.right {
+  .portrait {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+  .dropdown {
+    margin: 0 10px;
+  }
 }
 </style>
